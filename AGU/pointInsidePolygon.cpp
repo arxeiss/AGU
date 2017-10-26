@@ -57,12 +57,6 @@ void runPointInsidePolygonCheck() {
 	cv::Mat pane(height, width, CV_8UC3);
 	
 	std::vector<cv::Point> polygon;
-	cv::Point searchPoint;
-
-	searchPoint = cv::Point(400, 180);
-	//searchPoint = cv::Point(350, 40);
-	//searchPoint = cv::Point(130, 310);	
-
 	polygon.push_back(cv::Point(60, 200));
 	polygon.push_back(cv::Point(200, 80));
 	polygon.push_back(cv::Point(280, 60));
@@ -73,71 +67,81 @@ void runPointInsidePolygonCheck() {
 	polygon.push_back(cv::Point(230, 370));
 	polygon.push_back(cv::Point(120, 320));
 
-	pane = pane = CL_BACKGROUND;
-	drawLines(pane, polygon);
-	drawTitledPoints(pane, polygon, searchPoint);
-	showIm(pane);
-	cv::waitKey(10000);
+	std::vector<cv::Point> searchPoints(3);
+	searchPoints[0] = cv::Point(400, 180);
+	searchPoints[1] = cv::Point(350, 40);
+	searchPoints[2] = cv::Point(130, 310);
 
-	int startIndex = 0, currentIndex, endIndex = polygon.size() - 1;
-	int direction = 0;
-	while (abs(endIndex - startIndex) > 1)
+	for (int i = 0; i < searchPoints.size(); i++)
 	{
-		pane = pane = CL_BACKGROUND;
+
+		std::cout << "Search for point " << searchPoints[i] << "\n";
+		pane = CL_BACKGROUND;
 		drawLines(pane, polygon);
-
-		currentIndex = (endIndex - startIndex + 1) / 2 + startIndex;
-		direction = getPointSideToLine(polygon[0], polygon[currentIndex], searchPoint);
-		printStep(startIndex, currentIndex, endIndex, direction);
-
-		drawArrowedLine(pane, polygon[0], polygon[currentIndex], direction);
-		drawTitledPoints(pane, polygon, searchPoint);
+		drawTitledPoints(pane, polygon, searchPoints[i]);
 		showIm(pane);
-		cv::waitKey(2000);
-		
-		if (direction < 0)
+		cv::waitKey(3000);
+
+		int startIndex = 0, currentIndex, endIndex = polygon.size() - 1;
+		int direction = 0;
+		while (abs(endIndex - startIndex) > 1)
 		{
-			endIndex = currentIndex;
+			pane = CL_BACKGROUND;
+			drawLines(pane, polygon);
+
+			currentIndex = (endIndex - startIndex + 1) / 2 + startIndex;
+			direction = getPointSideToLine(polygon[0], polygon[currentIndex], searchPoints[i]);
+			printStep(startIndex, currentIndex, endIndex, direction);
+
+			drawArrowedLine(pane, polygon[0], polygon[currentIndex], direction);
+			drawTitledPoints(pane, polygon, searchPoints[i]);
+			showIm(pane);
+			cv::waitKey(2000);
+
+			if (direction < 0)
+			{
+				endIndex = currentIndex;
+			}
+			else
+			{
+				startIndex = currentIndex;
+			}
+		}
+		std::printf("Final: ");
+		printStep(startIndex, currentIndex, endIndex);
+
+		cv::Point p2 = (direction > 0 ? polygon[currentIndex] : polygon[startIndex]),
+			p3 = (direction > 0 ? polygon[endIndex] : polygon[currentIndex]);
+		bool isInsidePolygon = isPointInsideTriangle(polygon[0], p2, p3, searchPoints[i]);
+
+		pane = CL_BACKGROUND;
+		drawLines(pane, polygon);
+		drawTitledPoints(pane, polygon, searchPoints[i]);
+		drawPoint(pane, polygon[0], false, true);
+		drawPoint(pane, p2, false, true);
+		drawPoint(pane, p3, false, true);
+		showIm(pane);
+		cv::waitKey(1500);
+
+		drawArrowedLine(pane, polygon[0], p2, getPointSideToLine(polygon[0], p2, searchPoints[i]));
+		showIm(pane);
+		cv::waitKey(1500);
+
+		drawArrowedLine(pane, p2, p3, getPointSideToLine(p2, p3, searchPoints[i]));
+		showIm(pane);
+		cv::waitKey(1500);
+
+		drawArrowedLine(pane, p3, polygon[0], getPointSideToLine(p3, polygon[0], searchPoints[i]));
+		showIm(pane);
+		if (isInsidePolygon) {
+			std::printf("Point is inside polygon - on the same side of all triangle edges\n\n");
 		}
 		else
 		{
-			startIndex = currentIndex;
+			std::printf("Point is NOT inside polygon - NOT on the same side of all triangle edges\n\n");
 		}
+		cv::waitKey(3000);
 	}
-	std::printf("Final: ");
-	printStep(startIndex, currentIndex, endIndex);
-
-	cv::Point p2 = (direction > 0 ? polygon[currentIndex] : polygon[startIndex]),
-		p3 = (direction > 0 ? polygon[endIndex] : polygon[currentIndex]);
-	bool isInsidePolygon = isPointInsideTriangle(polygon[0], p2, p3, searchPoint);
-	
-	pane = pane = CL_BACKGROUND;
-	drawLines(pane, polygon);
-	drawTitledPoints(pane, polygon, searchPoint);
-	drawPoint(pane, polygon[0], false, true);
-	drawPoint(pane, p2, false, true);
-	drawPoint(pane, p3, false, true);
-	showIm(pane);
-	cv::waitKey(1500);
-
-	drawArrowedLine(pane, polygon[0], p2, getPointSideToLine(polygon[0], p2, searchPoint));
-	showIm(pane);
-	cv::waitKey(1500);
-	
-	drawArrowedLine(pane, p2, p3, getPointSideToLine(p2, p3, searchPoint));
-	showIm(pane);
-	cv::waitKey(1500);
-	
-	drawArrowedLine(pane, p3, polygon[0], getPointSideToLine(p3, polygon[0], searchPoint));
-	showIm(pane);
-	if (isInsidePolygon) {
-		std::printf("\nPoint is inside polygon - on the same side of all triangle edges");
-	}
-	else
-	{
-		std::printf("\nPoint is NOT inside polygon - NOT on the same side of all triangle edges");
-	}
-	cv::waitKey(0);
 
 	return;
 
