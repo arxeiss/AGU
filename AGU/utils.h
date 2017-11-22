@@ -4,6 +4,7 @@
 #define DEG2RAD(deg) ((deg) * M_PI / 180.0f)
 #define INT_FLOOR(x) ((int)std::floor(x))
 #define INT_CEIL(x) ((int)std::ceil(x))
+#define MIDDLE_NUM(a, b) ( (float)((b)-(a))/2.0f + (a) )
 
 #define CL_BACKGROUND cv::Scalar(55, 55, 55)
 #define CL_WHITE cv::Scalar(255, 255, 255)
@@ -29,6 +30,8 @@ float getRandom(float from, float to);
 float getRandom(float to = 1.0f);
 
 cv::Point getLineMiddle(const cv::Point p1, const cv::Point p2);
+float getLineLength(const cv::Point p1, const cv::Point p2);
+float getLineLength(const Line line);
 int getPointSideToLine(const cv::Point lineStart, const cv::Point lineEnd, const cv::Point testPoint);
 bool isPointInsideTriangle(const cv::Point p1, const cv::Point p2, const cv::Point p3, const cv::Point searchPoint);
 
@@ -39,3 +42,7 @@ Vec2f getNormalizedVector(const Vec2f vec);
 Vec2f getNormalizedVector(const cv::Point p1, const cv::Point p2);
 Vec2f getPerpendicularVector(const cv::Point p1, const cv::Point p2, const bool toRight = true);
 Vec2f getPerpendicularVector(const Vec2f vec, const bool toRight = true);
+Vec2f rotateVector(const Vec2f vec, float deg);
+
+void doubleArrowedLine(cv::Mat &mat, cv::Point p1, cv::Point p2, const cv::Scalar color, int thickness = 1, int arrowSize = 5);
+void doubleArrowedLine(cv::Mat &mat, Line line, const cv::Scalar color, int thickness = 1, int arrowSize = 5);

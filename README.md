@@ -5,6 +5,7 @@ Visualization of algorithms studied in Technical university of Ostrava in lectur
 - Point in Polygon test
 - Convex hull - Jarvis march
 - Closest pair of points in 1D
+- Closest pair of points in 2D
  
 All algorithms are visualised and uploaded on [YouTube](https://www.youtube.com/playlist?list=PLkX8LaR_NiJBx38USppREzcDAvbfybqhO&disable_polymer=true).
 
