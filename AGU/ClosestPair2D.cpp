@@ -22,9 +22,8 @@ void drawPoints(cv::Mat &pane, std::vector<cv::Point> &points, int startIndex, i
 	{
 		cv::circle(pane, points[i], radius, color, -1);
 		if (showIndex) {
-			std::stringstream ss;
-			ss << (i + 1);
-			cv::putText(pane, ss.str(), cv::Point(points[i].x , points[i].y - 8), CV_FONT_HERSHEY_SIMPLEX, 0.4f, CL_WHITE, 1);
+			std::string ss = std::to_string(i + 1);
+			cv::putText(pane, ss.c_str(), cv::Point(points[i].x , points[i].y - 8), CV_FONT_HERSHEY_SIMPLEX, 0.4f, CL_WHITE, 1);
 		}
 	}
 }

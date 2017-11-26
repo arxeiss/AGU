@@ -45,9 +45,8 @@ void drawTitledPoints(cv::Mat &pane, std::vector<cv::Point> &polygon, cv::Point 
 	for (int i = 0; i < polygon.size(); i++)
 	{
 		drawPoint(pane, polygon[i]);
-		std::stringstream ss;
-		ss << i;
-		cv::putText(pane, ss.str(), cv::Point(polygon[i].x - 10, polygon[i].y- 10 ), CV_FONT_HERSHEY_SIMPLEX, 0.4f, CL_WHITE, 1);
+		std::string ss = std::to_string(i);
+		cv::putText(pane, ss.c_str(), cv::Point(polygon[i].x - 10, polygon[i].y- 10 ), CV_FONT_HERSHEY_SIMPLEX, 0.4f, CL_WHITE, 1);
 	}
 	drawPoint(pane, searchPoint, true);
 }
