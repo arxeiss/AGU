@@ -8,9 +8,6 @@ void runClosestPair2D();
 int main(){
 	srand(time(NULL));
 
-	runClosestPair2D();
-	return 0;
-
 	std::cout << "Insert index of algorithm to run:\n";
 	std::cout << "\t1. Point in Polygon test\n";
 	std::cout << "\t2. Convex hull - Jarvis march\n";
